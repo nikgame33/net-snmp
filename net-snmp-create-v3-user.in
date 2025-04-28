@@ -53,13 +53,13 @@ case $1 in
 	    exit 1
 	fi
         case $1 in
-            DES|AES|AES128)
-	    Xalgorithm=$1
-	    shift
-	    ;;
-            des|aes|aes128)
-	    Xalgorithm=$(echo "$1" | tr a-z A-Z)
-	    shift
+    	    DES|AES|AES128|AES256)
+    	    algorithm=$1
+      	    shift
+    	    ;;
+    	    des|aes|aes128|aes256)
+  	    Xalgorithm=$(echo "$1" | tr a-z A-Z)
+    	    shift
 	    ;;
             *)
 	    xpassphrase=$1
