@@ -8,9 +8,13 @@
      modify it under the same terms as Perl itself.
 */
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-qual"
+#pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#pragma GCC diagnostic pop
 
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
@@ -1177,6 +1181,10 @@ __snmp_xs_cb(int op, netsnmp_session *ss, int reqid, netsnmp_pdu *pdu,
   SV **err_str_svp = hv_fetch((HV*)SvRV(sess_ref), "ErrorStr", 8, 1);
   SV **err_num_svp = hv_fetch((HV*)SvRV(sess_ref), "ErrorNum", 8, 1);
   SV **err_ind_svp = hv_fetch((HV*)SvRV(sess_ref), "ErrorInd", 8, 1);
+
+  /* These are purely informative; only act on the final callback. */
+  if (op == NETSNMP_CALLBACK_OP_RESEND)
+    return 1;
 
   ENTER;
   SAVETMPS;
